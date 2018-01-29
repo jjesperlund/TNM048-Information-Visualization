@@ -30,6 +30,21 @@ function calculateRandomCentroids(data, k){
 
 }
 
+function distance(a, b, dim) {
+    return Math.sqrt(euclideanSum(a,b,dim));
+}
+
+function euclideanSum(a, b, dim) {    
+
+    if(dim<300){
+        var euclideanDistance = Math.pow((a.A - b.A),2) + Math.pow((a.B - b.B),2) + Math.pow((a.C - b.C),2);   
+    }
+
+    return euclideanDistance;
+    
+}
+
+
 function kmeans(data, k) {
 
     /* STEP 1
@@ -38,10 +53,30 @@ function kmeans(data, k) {
     */
     var centroids = calculateRandomCentroids(data, k);
 
+
     /* STEP 2
     Assign each item to the cluster that has the closest centroid, using the 
     Euclidean distance.
     */
+    var dim = Object.keys(data[1]).length;
+    
+    data.forEach(function(d){
+        var nearestIndex = -1;
+        var dist = Infinity;    
+        centroids.forEach(function(c,i){
+            var nearestDist = distance(c, d,dim);
+            console.log(nearestDist); 
+            if(nearestDist < dist){
+                dist = nearestDist;
+                nearestIndex = i;
+            }
+        });
+
+        d.assignments = nearestIndex;
+        return d;
+     });
+     
+
 
     /* STEP 3
     When all objects have been assigned, recalculate the positions of the K 
@@ -53,6 +88,7 @@ function kmeans(data, k) {
     within each cluster.
     */
 
+    return data;
 
 };
 

@@ -45,7 +45,7 @@ function pc(data1,data2,data3){
       d.C = +d.C;
    });
 
-   var k = 4;
+   var k = 2;
    var kmeansRes = kmeans(data,k);
 
    draw(kmeansRes);
@@ -68,7 +68,7 @@ function pc(data1,data2,data3){
          .enter().append("path")
          .attr("d", path)
          //.style("stroke", function(d) { return "hsl(" + Math.random() * 360 + ",100%,50%)"; });
-         .style("stroke", function(d, i) { return colors[kmeansRes.assignments[i]]; });
+         .style("stroke", function(d, i) { return colors[kmeansRes[i].assignments]; });
 
 
      // Add a group element for each dimension.
