@@ -12,48 +12,9 @@ function calculateRandomCentroids(data, k, dim){
  */
     var centroids = [];
 	
-	if(dim.length == 3){
-		//Maximum data values for 3 dimensions
-		const maxA = Math.max.apply(Math, data.map(o => o.A)),
-			  minA = Math.min.apply(Math, data.map(o => o.A)),
-			  maxB = Math.max.apply(Math, data.map(o => o.B)),
-			  minB = Math.min.apply(Math, data.map(o => o.B)),
-			  maxC = Math.max.apply(Math, data.map(o => o.C)),
-			  minC = Math.min.apply(Math, data.map(o => o.C));
-
-		//Calculating K random centroids in data space
-		for(let i = 0; i < k; i++) {
-			centroids.push({
-				'A': Math.random() * (maxA - minA) + minA,
-				'B': Math.random() * (maxB - minB) + minB,
-				'C': Math.random() * (maxC - minC) + minC
-			});      
-		}
-	} else {
-		//Maximum data values for 5 dimensions
-		const maxA = Math.max.apply(Math, data.map(o => o.A)),
-			  minA = Math.min.apply(Math, data.map(o => o.A)),
-			  maxB = Math.max.apply(Math, data.map(o => o.B)),
-			  minB = Math.min.apply(Math, data.map(o => o.B)),
-			  maxC = Math.max.apply(Math, data.map(o => o.C)),
-			  minC = Math.min.apply(Math, data.map(o => o.C));
-			  maxD = Math.max.apply(Math, data.map(o => o.D)),
-			  minD = Math.min.apply(Math, data.map(o => o.D));
-			  maxE = Math.max.apply(Math, data.map(o => o.E)),
-			  minE = Math.min.apply(Math, data.map(o => o.E));
-
-
-		//Calculating K random centroids in data space
-		for(let i = 0; i < k; i++) {
-			centroids.push({
-				'A': Math.random() * (maxA - minA) + minA,
-				'B': Math.random() * (maxB - minB) + minB,
-				'C': Math.random() * (maxC - minC) + minC,
-				'D': Math.random() * (maxD - minD) + minD,
-				'E': Math.random() * (maxE - minE) + minE
-
-			});      
-		}
+	for(let i = 0; i < k; i++){
+		var randomObject = Math.floor(Math.random() * data.length);
+		centroids.push(data[randomObject]);
 	}
 
     return centroids;
