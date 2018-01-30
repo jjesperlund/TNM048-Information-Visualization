@@ -6,11 +6,14 @@
 */
 
 function calculateRandomCentroids(data, k, dim){
-
+/* 
+ * Randomly place K points into the space represented by the items that 
+ * are being clustered. These points represent the initial cluster centroids.
+ */
     var centroids = [];
 	
 	if(dim.length == 3){
-		//Maximum data values (A,B,C)
+		//Maximum data values for 3 dimensions
 		const maxA = Math.max.apply(Math, data.map(o => o.A)),
 			  minA = Math.min.apply(Math, data.map(o => o.A)),
 			  maxB = Math.max.apply(Math, data.map(o => o.B)),
@@ -27,7 +30,7 @@ function calculateRandomCentroids(data, k, dim){
 			});      
 		}
 	} else {
-		//Maximum data values (A,B,C)
+		//Maximum data values for 5 dimensions
 		const maxA = Math.max.apply(Math, data.map(o => o.A)),
 			  minA = Math.min.apply(Math, data.map(o => o.A)),
 			  maxB = Math.max.apply(Math, data.map(o => o.B)),
@@ -53,13 +56,15 @@ function calculateRandomCentroids(data, k, dim){
 		}
 	}
 
-    
     return centroids;
 
 }
 
 function assignCluster(data, centroids,dim){
-
+/*
+ * Assign each item to the cluster that has the closest centroid, using the 
+ * Euclidean distance.
+ */
     data.forEach(function(d){
         var nearestIndex = -1;
         var dist = Infinity;    
@@ -76,19 +81,28 @@ function assignCluster(data, centroids,dim){
 }
 
 function euclideanSum(a, b, dim) {    
-
+/*
+ * Calculate Euclidean distance between 2 points
+ * in the data space
+ */
     var euclideanDistance = 0;
     for(let i = 0; i < dim.length; i++){
-        //euclideanDistance = Math.pow((a.A - b.A),2) + Math.pow((a.B - b.B),2) + Math.pow((a.C - b.C),2);   
         euclideanDistance += Math.pow(a[dim[i]] - b[dim[i]],2);
     }
     return euclideanDistance;    
 }
 
-function calculateAverage(data, centroid, n, dim){   
+function calculateAverage(data, centroid, n, dim){  
+/* 
+ * When all objects have been assigned, recalculate the positions of the K 
+ * centroids to be in the centre of the cluster. (Averaging values in all dimensions)
+ */
+
+	//Data set 1 or 2
     if(dim.length == 3){
-		var averageA,averageB,averageC,amount;
-		var cluster = [];
+
+		var averageA, averageB, averageC, amount, cluster = [];
+
 		for(let i = 0; i<n; i++){
 			averageA = 0;
 			averageB = 0;
@@ -105,13 +119,14 @@ function calculateAverage(data, centroid, n, dim){
 			averageA = averageA/amount;
 			averageB = averageB/amount;
 			averageC = averageC/amount;
+
 			cluster.push({
 				'A': averageA,
 				'B': averageB,
 				'C': averageC
 			});   
 		}
-	} else {
+	} else { //Data set 3
 		var averageA, averageB, averageC, averageD, averageE, amount;
 		var cluster = [];
 		for(let i = 0; i < n; i++ ){
@@ -151,7 +166,11 @@ function calculateAverage(data, centroid, n, dim){
 }
 
 function checkQuality(data,average,n,dim){
-    
+/*  
+ * Check the quality of the cluster using the sum of the squared distances 
+ * within each cluster.
+ */
+		
     var quality;
     var qualityArray = [];
 
@@ -160,7 +179,6 @@ function checkQuality(data,average,n,dim){
         data.forEach(function(d){
             if(d.assignments == i)
 				quality += euclideanSum(d, average[i], dim);
-     
         }) 
 		
         qualityArray[i] = quality;
@@ -174,7 +192,6 @@ function getSum(total, num) {
     return total + num;
 }
 
-
 function kmeans(data, k) {
 
     var quality = [],
@@ -183,41 +200,24 @@ function kmeans(data, k) {
 		oldQuality,
 		iterations = 0;
 	
-    /* STEP 1
-    Randomly place K points into the space represented by the items that 
-    are being clustered. These points represent the initial cluster centroids.
-    */
     var centroids = calculateRandomCentroids(data, k, dim);
-
-    /* STEP 2
-    Assign each item to the cluster that has the closest centroid, using the 
-    Euclidean distance.
-    */
-        
+	   
+	// Iterate while the the cluster centroids change more than a set threshold value
     do {
 		oldQuality = totQuality;
+
         assignCluster(data, centroids, dim);
+		centroids = calculateAverage(data, centroids, k, dim);
+		quality = checkQuality(data, centroids, k, dim);
 		
-        /* STEP 3
-        When all objects have been assigned, recalculate the positions of the K 
-        centroids to be in the centre of the cluster. (Averaging values in all dimensions)
-        */
-        centroids = calculateAverage(data, centroids, k, dim);
-		
-        /* STEP 4
-        Check the quality of the cluster using the sum of the squared distances 
-        within each cluster.
-        */
-        quality = checkQuality(data, centroids, k, dim);
 		iterations++;
-		//console.log(quality);
 		
+		//Get sum of quality vector
 		totQuality = quality.reduce(getSum);
-		
 		
 	} while(Math.abs(totQuality - oldQuality) > 0.001)
         
-	console.log(iterations);
+	console.log('Algorithm stopped after ' + iterations + ' iterations');
    
     return data;
 };

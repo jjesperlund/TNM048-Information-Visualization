@@ -38,7 +38,7 @@ function pc(data1,data2,data3){
            );
    }));
 
-     // change data strings into number format
+   // change data strings into number format
    data.forEach(function(d) {
 	   
 	  if(Object.keys(data[1]).length == 3) {
