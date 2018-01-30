@@ -5,7 +5,7 @@
 function pc(data1,data2,data3){
 
   //Chage data set
-  var data = data1;
+  var data = data3;
   var div = '#pc-chart';
 
   var parentWidth = $(div).parent().width();
@@ -40,12 +40,22 @@ function pc(data1,data2,data3){
 
      // change data strings into number format
    data.forEach(function(d) {
-      d.A = +d.A;
-      d.B = +d.B;
-      d.C = +d.C;
+	   
+	  if(Object.keys(data[1]).length == 3) {
+		 d.A = +d.A;
+		 d.B = +d.B;
+		 d.C = +d.C; 
+	  } else {
+		 d.A = +d.A;
+		 d.B = +d.B;
+		 d.C = +d.C;
+		 d.D = +d.D;
+		 d.E = +d.E;
+	  }
+     
    });
 
-   var k = 2;
+   var k = 5;
    var kmeansRes = kmeans(data,k);
 
    draw(kmeansRes);
