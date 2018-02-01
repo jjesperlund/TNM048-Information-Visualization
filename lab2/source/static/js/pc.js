@@ -39,23 +39,15 @@ function pc(data1,data2,data3){
    }));
 
    // change data strings into number format
+   var dimensions = Object.keys(data[0]);
    data.forEach(function(d) {
-	   
-	  if(Object.keys(data[1]).length == 3) {
-		 d.A = +d.A;
-		 d.B = +d.B;
-		 d.C = +d.C; 
-	  } else {
-		 d.A = +d.A;
-		 d.B = +d.B;
-		 d.C = +d.C;
-		 d.D = +d.D;
-		 d.E = +d.E;
-	  }
+       
+    for(let i = 0; i < dimensions.length; i++)
+        d[dimensions[i]] = +d[dimensions[i]];
      
    });
 
-   var k = 5;
+   var k = 4;
    var kmeansRes = kmeans(data,k);
 
    draw(kmeansRes);
