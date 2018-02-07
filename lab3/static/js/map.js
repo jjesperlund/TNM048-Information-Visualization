@@ -1,15 +1,11 @@
-/*
-  Author: Kahin Akram Hassan
-  Date: Jan 31 2018
-*/
 
 function map(data, world_map_json){
 
   var div = '#map';
   var parentWidth = $(div).parent().width();
   var margin = {top: 0, right: 0, bottom: 0, left: 0},
-            width = parentWidth - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+      width = parentWidth - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
 
   var curr_mag = 4;
   var format = d3.timeParse("%Y-%m-%dT%H:%M:%S.%LZ");
@@ -76,9 +72,6 @@ function map(data, world_map_json){
 
       array.map(function (d, i) {
           data.push({
-            //Create five variables called :
-            //id,type,geometry,mag and place and assign the corresponding value to is
-            //geometry is an object and has two other attributes called coordinates and type.
             "id": d.id,
             "type": "Feature",
             "geometry": {
@@ -90,13 +83,15 @@ function map(data, world_map_json){
             "depth": d.depth
           });
       });
+
       return data;
   }
 
   //Draws the map and the points
   function drawPoints(){
-      //draw point
+      
     var point = g.selectAll(".point").data(geoData.features);
+
     point.enter().append("path")
           .attr("class", "point")
           .attr("d", path)
@@ -119,9 +114,9 @@ function map(data, world_map_json){
           });
 
   }
+
   //Calls the filtering function
   d3.select("#slider").on("input", function () {
-      //Call filterMag function here with this.value and data
       filterMag(this.value);
   });
 
@@ -138,7 +133,7 @@ function map(data, world_map_json){
               .style("fill", "orange")
               .style("opacity", 0.3)
               .style("visibility", function (d) {
-                //show if mag > curr_mag && tmpT between timeExt
+                //show selected points
                   var tmpT = format(d.time);
                   if ((tmpT.getTime() > timeExt[0].getTime() && tmpT.getTime() < timeExt[1].getTime()) && d.mag > curr_mag)
                   {
@@ -163,7 +158,7 @@ function map(data, world_map_json){
               .style("fill", "orange")
               .style("opacity", 0.3)
               .style("visibility", function (d) {
-                  //push d to filterData only if mag is > curr_mag and tmpT is between timeExt
+
                     var tmpT = format(d.time);
                 
                     if ((tmpT.getTime() > timeExt[0].getTime() && tmpT.getTime() < timeExt[1].getTime()) && d.mag > curr_mag)
@@ -190,7 +185,7 @@ function map(data, world_map_json){
       var kmeansRes = kmeans(filterdData, k);
 
       d3.selectAll(".point").data(data)
-          //Change style fill if id == in filterdData id
+          //Change style fill to cluster colors
               .style("fill", function (d) {
                   for (var j = 0; j < filterdData.length; j++)
                   {

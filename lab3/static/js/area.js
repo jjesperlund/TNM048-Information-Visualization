@@ -1,7 +1,3 @@
-/*
-  Author: Kahin Akram Hassan
-  Date: Jan 31 2018
-*/
 
 function area(data) {
 
@@ -9,12 +5,10 @@ function area(data) {
 
   var parentWidth = $(div).parent().width();
   var margin = {top: 10, right: 10, bottom: 80, left: 40},
-        margin2 = {top: 500 - 50, right: 40, bottom: 20, left: 40},
-
-        width = parentWidth - margin.left - margin.right;
-        height = 500 - margin.top - margin.bottom;
-        height2 = 500 - margin2.top - margin2.bottom;
-
+      margin2 = {top: 500 - 50, right: 40, bottom: 20, left: 40},
+      width = parentWidth - margin.left - margin.right;
+      height = 500 - margin.top - margin.bottom;
+      height2 = 500 - margin2.top - margin2.bottom;
 
   //Create variable for parsing the time axis
   var parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%S.%LZ");
@@ -67,7 +61,6 @@ function area(data) {
       .attr("height", height);
 
   //Set the domains for the 4 axes
-
   //big chart
   x.domain(d3.extent(data, function(d) { return parseDate(d.time); }));
   y.domain([d3.min(data, function(d) { return d.mag; }), d3.max(data, function(d) { return d.mag; })]);
