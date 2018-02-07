@@ -1,3 +1,4 @@
 ## Interactive Visualization with filtering and linking
+ Developed with D3.js
 
 ![result lab 1](lab1.png)
